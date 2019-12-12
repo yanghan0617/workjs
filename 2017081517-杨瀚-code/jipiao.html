@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="plane.js"></script>
+    <title> 机票预订</title>
+</head>
+<style>
+    body {
+    background: rgb(58,58,58);
+    color:white;
+    font-family:Helvetica Neue,Helvetica,Arial,sans-serif;
+    margin:0;
+    padding:0;
+}
+footer{
+    background:black;
+    padding:10px;
+ }
+</style>
+
+<script>
+    i = 0;
+p = 0;
+m = 0;
+c = 0;
+t = 0;
+
+function doit(e) {
+    var checkboxs = document.getElementsByClassName("check");
+
+    if (checkboxs[e].checked) {
+        insertl(checkboxs[e]);
+    } else {
+        deletel(checkboxs[e]);
+    }
+}
+
+function insertl(e) {
+    var div = document.createElement("div");
+    if (e == null) {
+        var name = "";
+        div.id = i;
+        var str = "<h3 id=" + i + 100 + ">乘机人：" + name + "</h3><hr>购票类型：<select class='money' onchange='showMoney()'><option value='成人票'>成人票</option><option value='特价票'>特价票</option></select><br>&nbsp;&nbsp;&nbsp;&nbsp;姓名&nbsp;&nbsp;&nbsp;&nbsp;：<input type='text' value='" + name + "' onblur='change(" + i + ")' id=" + i + 99 + " class='notnull'> <br>证件类型：<select><option value=‘护照’>护照</option><option value=‘身份证’>身份证</option></select><br>证件号码：<input type='text' class='notnull'><button id=" + i + 98 + " onclick='deletel(this)'>删除</button><hr>";
+        div.innerHTML = str;
+        var parent = document.getElementById("ckxx");
+        parent.appendChild(div);
+        i++;
+    } else {
+        div.id = e.value;
+        var name = e.value;
+        var str = "<h3>乘机人：" + name + "</h3><hr>购票类型：<select class='money' onchange='showMoney()'><option value='成人票'>成人票</option><option value='特价票'>特价票</option></select><br>&nbsp;&nbsp;&nbsp;&nbsp;姓名&nbsp;&nbsp;&nbsp;&nbsp;：<input type='text' value=" + name + " readonly> <br>证件类型：<select><option value=‘护照’>护照</option><option value=‘身份证’>身份证</option></select><br>证件号码：<input type='text' onfocus='focus()' class='notnull' class='number'><hr>";
+        div.innerHTML = str;
+        var parent = e.parentNode.parentNode;
+        parent.appendChild(div);
+    }
+    p++;
+    m = +2000;
+    showMoney();
+}
+
+function deletel(e) {
+    if (e.innerHTML == "删除") {
+        var div = e.parentNode;
+    } else {
+        var div = document.getElementById(e.value);
+    }
+    div.parentNode.removeChild(div);
+    p--;
+    showMoney();
+}
+
+function change(id) {
+    document.getElementById("" + id + 100).innerHTML = "乘机人：" + document.getElementById("" + id + 99).value;
+}
+
+function showMoney() {
+    var money = document.getElementsByClassName("money");
+    var sum = 0;
+    c = 0;
+    t = 0;
+    for (var i = 0; i < money.length; i++) {
+        var index = money[i].selectedIndex;
+        var type = money[i][index].value;
+        console.log(type);
+        if (type == "成人票") {
+            sum += 2000;
+            c++;
+        } else {
+            sum += 1000;
+            t++;
+        }
+    }
+    document.getElementById("pprice").innerHTML = p + "人" + sum + "元";
+}
+
+function next() {
+    var flag = true;
+    var e = document.getElementsByClassName("notnull");
+    for (var i = 0; i < e.length; i++) {
+        if (e[i].value == "" || e[i].value == "该信息不能为空！") {
+            e[i].value = "该信息不能为空！";
+            flag = false;
+        }
+    }
+    var phone = document.getElementById("phone").value;
+    if (!(/^1(3|4|5|6|7|8|9)\d{9}$/.test(phone))) {
+        alert("手机号码有误，请重填");
+        flag = false;
+    }
+
+    if (flag) {
+        alert("success");
+    }
+}
+
+function titl() {
+    document.getElementById("tit").title = c + "张成人票（" + c * 2000 + "元）" + t + "张特价票（" + t * 1000 + "元）";
+}
+</script>
+
+<body>
+        <div id="back">
+                <div id="data">
+                    <span id="cg"></span>
+                    <script>
+                        setInterval("cg.innerHTML=new Date().toLocaleString()", 1000);
+                    </script>
+                </div>
+                <div id="title">
+                    <h1 style="text-align:center">预定机票</h1>
+                </div>
+                <div id="main">
+                    <h2 style="color: cadetblue;">&nbsp;&nbsp;机票预订</h3>
+                        <hr>
+                        <div class="little" id="hbxx">
+                            <h3 style="background-color: cornflowerblue;">&nbsp;&nbsp;*航班信息</h3>
+                            东方航空 H123456 &nbsp;&nbsp;
+                            <span class="blue">[修改航班]&nbsp;[退改签]</span><br> 机型 H66&nbsp;&nbsp;&nbsp;&nbsp;<span class="blue">
+                            [修改舱位]</span><br> 2019年1月16日 15:00 昆明长水机场(起飞) -> 2019年1月10日 20:00 大连金州机场(到达)
+                            <hr>
+                        </div>
+                        <div class="little" id="price">
+                            <span id="pprice">?人？元</span>&nbsp;&nbsp;&nbsp;<span class="blue" title="" id="tit" onmouseover="titl()">机票明细</span>
+                        </div>
+                        <div class="little" id="ckxx">
+                            <h3 style="background-color: cornflowerblue; text-align: center;">&nbsp;&nbsp;*乘客信息</h3>
+                            <div style="text-align: left;">在常用姓名中搜索：<input type="text"></div>
+                            <div style="text-align: right;">
+                                <input type="checkbox" value="雷锋" class="check" onclick="doit(0);">&nbsp;小路&nbsp;&nbsp;
+                                <input type="checkbox" value="帅哥" class="check" onclick="doit(1);">&nbsp;小孔&nbsp;&nbsp;
+                                <input type="checkbox" value="丑女" class="check" onclick="doit(2);">&nbsp;小张&nbsp;&nbsp;
+                                <input type="checkbox" value="团长" class="check" onclick="doit(3);">&nbsp;小天&nbsp;&nbsp;
+                                <span class="blue">更多</span>
+                            </div>
+                            <hr>
+                            <button style="position: relative; left: 0px;" onclick="insertl(null)">新增乘客</button>
+                        </div>
+                        <div class="little" id="lxrxx">
+                            <h3 style="background-color: cornflowerblue;">&nbsp;&nbsp;*联系人信息</h3>
+                            联&nbsp;&nbsp;系&nbsp;&nbsp;人：<input type="text" class="notnull"><br> 手机号码：
+                            <input type="text" class="notnull" id="phone"><br> 联系地址：
+                            <input type="text"><br>
+                            <hr>
+                        </div>
+                        <div class="little">
+                            <button>上一步</button>
+                            <button onclick="next()">下一步</button>
+                        </div>
+                </div>
+            </div>
+            <script>
+                insertl(null);
+            </script>
+</body>
+</html>
